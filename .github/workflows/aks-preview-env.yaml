@@ -26,17 +26,23 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - name: 'Run az deploy cmd'
-        run: |
-          az deployment group create --resource-group "mht-playground" --template-file 'bicep-templates/aks.bicep' --parameters aks_name="SCCP-${GITHUB_REF_NAME}"
-
-      - name: 'Run az get credentials'
-        run: |
-          az aks get-credentials --resource-group mht-playground --name SCCP-${GITHUB_REF_NAME}
-
       - name: 'Run kubectl'
         run: |
-          kubectl version
+          echo GITHUB_REF_NAME: ${GITHUB_REF_NAME}
+          echo GITHUB_BASE_REF: ${GITHUB_BASE_REF}
+          echo GITHUB_HEAD_REF: ${GITHUB_HEAD_REF}
+
+      # - name: 'Run az deploy cmd'
+      #   run: |
+      #     az deployment group create --resource-group "mht-playground" --template-file 'bicep-templates/aks.bicep' --parameters aks_name="SCCP-${GITHUB_REF_NAME}"
+
+      # - name: 'Run az get credentials'
+      #   run: |
+      #     az aks get-credentials --resource-group mht-playground --name SCCP-${GITHUB_REF_NAME}
+
+      # - name: 'Run kubectl'
+      #   run: |
+      #     kubectl version
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
