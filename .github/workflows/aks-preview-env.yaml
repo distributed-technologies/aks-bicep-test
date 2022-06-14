@@ -39,6 +39,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Close Pull Request Job
     steps:
+      # The credentials looks like https://github.com/Azure/login#configure-a-service-principal-with-a-secret
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: 'Delete cluster'
         run: |
           az aks delete --resource-group "mht-playground" --name "SCCP-${GITHUB_HEAD_REF}" --yes
