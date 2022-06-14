@@ -20,5 +20,4 @@ jobs:
 
       - name: 'Run az deploy cmd'
         run: |
-          echo ${GITHUB_REF_NAME}
-          # az deployment group create --resource-group "mht-playground" --template-file 'bicep-templates/aks.bicep' --parameters aks_name="SCCP-${GITHUB_REF_NAME}"
+          az deployment group create --resource-group "mht-playground" --template-file 'bicep-templates/aks.bicep' --parameters aks_name="SCCP-${GITHUB_REF_NAME}"
