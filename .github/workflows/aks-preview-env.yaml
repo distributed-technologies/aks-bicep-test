@@ -16,8 +16,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - uses: actions/checkout@v3
+
       - name: 'Run az deploy cmd'
         run: |
-          pwd
-          ls bicep-templates
+          echo ${GITHUB_REF_NAME}
           # az deployment group create --resource-group "mht-playground" --template-file 'bicep-templates/aks.bicep' --parameters aks_name="SCCP-${GITHUB_REF_NAME}"
