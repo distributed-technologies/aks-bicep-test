@@ -18,4 +18,4 @@ jobs:
 
       - name: 'Run az deploy cmd'
         run: |
-          az deployment group create --resource-group mht-playground --template-file 'bicep-templates/aks.bicep' --parameters aks_name='SCCP-dev-cluster'
+          az deployment group create --resource-group "mht-playground-$GITHUB_REF_NAME" --template-file 'bicep-templates/aks.bicep' --parameters aks_name='SCCP-dev-cluster'
