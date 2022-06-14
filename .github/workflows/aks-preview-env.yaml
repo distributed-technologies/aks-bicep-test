@@ -11,12 +11,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      # The credentials looks like https://github.com/Azure/login#configure-a-service-principal-with-a-secret
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: 'Run az commands'
+      - name: 'Run az deploy cmd'
         run: |
-          az account show
-          az group list
-          pwd
+          az deployment group create --resource-group mht-playground --template-file 'bicep-templates/aks.bicep' --parameters aks_name='SCCP-dev-cluster'
