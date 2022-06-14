@@ -1,14 +1,22 @@
 # File: .github/workflows/OIDC_workflow.yml
-
 name: Run Azure Login with OIDC
+
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+
 
 permissions:
       id-token: write
       contents: read
 jobs:
   build-and-deploy:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     steps:
       # The credentials looks like https://github.com/Azure/login#configure-a-service-principal-with-a-secret
@@ -29,3 +37,12 @@ jobs:
       - name: 'Run kubectl'
         run: |
           kubectl version
+
+  close_pull_request_job:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Close Pull Request Job
+    steps:
+      - name: 'Delete cluster'
+        run: |
+          az aks delete --resource-group "mht-playground" --name "SCCP-${GITHUB_REF_NAME}"
