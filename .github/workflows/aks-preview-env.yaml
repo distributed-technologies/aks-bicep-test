@@ -45,4 +45,4 @@ jobs:
     steps:
       - name: 'Delete cluster'
         run: |
-          az aks delete --resource-group "mht-playground" --name "SCCP-${GITHUB_HEAD_REF}"
+          az aks delete --resource-group "mht-playground" --name "SCCP-${GITHUB_HEAD_REF}" --yes
