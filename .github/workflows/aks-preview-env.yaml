@@ -21,3 +21,11 @@ jobs:
       - name: 'Run az deploy cmd'
         run: |
           az deployment group create --resource-group "mht-playground" --template-file 'bicep-templates/aks.bicep' --parameters aks_name="SCCP-${GITHUB_REF_NAME}"
+
+      - name: 'Run az get credentials'
+        run: |
+          az aks get-credentials --resource-group mht-playground --name SCCP-${GITHUB_REF_NAME}
+
+      - name: 'Run kubectl'
+        run: |
+          kubectl version
