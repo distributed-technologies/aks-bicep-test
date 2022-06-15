@@ -1,0 +1,80 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: rook-ceph-cluster
+  namespace: rook-ceph
+spec:
+  releaseName: rook-ceph-cluster
+  chart:
+    spec:
+      chart: rook-ceph-cluster
+      sourceRef:
+        kind: HelmRepository
+        name: rook-ceph
+        namespace: flux-system
+  interval: 5m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    image:
+      tag: v1.7.2
+    cephClusterSpec:
+      mon:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: managed-premium
+            resources:
+              requests:
+                storage: 10Gi
+      storage:
+        storageClassDeviceSets:
+        - name: set1
+        # This is the number of OSDs that will be created.
+          count: 4
+          portable: true
+          placement:
+            tolerations:
+            - key: storage-node
+              operator: Exists
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: agentpool
+                    operator: In
+                    values:
+                    - npstorage
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                      - rook-ceph-osd
+                      - rook-ceph-osd-prepare
+                  topologyKey: kubernetes.io/hostname
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "4Gi"
+            requests:
+              cpu: "500m"
+              memory: "2Gi"
+          volumeClaimTemplates:
+          - metadata:
+              name: data
+            spec:
+              resources:
+                requests:
+                  storage: 100Gi
+              storageClassName: managed-premium
+              volumeMode: Block
+              accessModes:
+                - ReadWriteOnce
