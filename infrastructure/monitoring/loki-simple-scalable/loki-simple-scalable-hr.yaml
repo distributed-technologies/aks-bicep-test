@@ -1,0 +1,76 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: loki-simple-scalable
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: loki-simple-scalable
+      version: "1.4.x"
+      sourceRef:
+        kind: HelmRepository
+        name: grafana-helm-charts
+        namespace: flux-system
+      interval: 60m
+  dependsOn:
+    - name: promtail
+  values:
+    loki:
+      storage:
+        type: s3
+        s3:
+          s3: ${BUCKET_NAME}
+          endpoint: ${BUCKET_HOST}
+          secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+          accessKeyId:  ${AWS_ACCESS_KEY_ID}
+          region: ${BUCKET_REGION}
+          insecure: true
+
+      structuredConfig:
+        limits_config:
+          retention_period: 336h
+        compactor:
+          retention_enabled: true
+
+    serviceMonitor:
+      enabled: true
+
+    write: &write-config
+      replicas: 3
+      persistence:
+        size: 10Gi
+        storageClass: null
+      extraArgs:
+        - -config.expand-env
+      extraEnv:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: loki-bucket-claim
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: loki-bucket-claim
+              key: AWS_SECRET_ACCESS_KEY
+        - name: BUCKET_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: loki-bucket-claim
+              key: BUCKET_HOST
+        - name: BUCKET_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: loki-bucket-claim
+              key: BUCKET_NAME
+        - name: BUCKET_REGION
+          valueFrom:
+            configMapKeyRef:
+              name: loki-bucket-claim
+              key: BUCKET_REGION
+
+    read:
+      <<: *write-config
+      replicas: 3

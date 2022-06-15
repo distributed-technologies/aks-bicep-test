@@ -4,3 +4,4 @@ namespace: flux-system
 resources:
   - rook-ceph.yaml
   - prometheus-community.yaml
+  - grafana-helm-charts.yaml

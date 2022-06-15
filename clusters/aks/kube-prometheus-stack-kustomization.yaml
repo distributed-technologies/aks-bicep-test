@@ -1,7 +1,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: monitoring
+  name: kube-prometheus-stack
   namespace: flux-system
 spec:
   interval: 3m0s
@@ -10,7 +10,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infrastructure/monitoring
+  path: ./infrastructure/monitoring/kube-prometheus-stack
   prune: true
   wait: true
-  timeout: 5m0s
+  timeout: 10m0s
