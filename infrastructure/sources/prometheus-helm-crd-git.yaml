@@ -1,0 +1,11 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: prometheus-helm
+  namespace: flux-system
+spec:
+  interval: 30s
+  ref:
+    tag: kube-prometheus-stack-36.0.1
+  url: https://github.com/prometheus-community/helm-charts.git
