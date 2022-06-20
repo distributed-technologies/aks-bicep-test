@@ -3,5 +3,4 @@ kind: Kustomization
 namespace: flux-system
 resources:
   - rook-ceph.yaml
-  - team-dt.yaml
-  - prometheus-helm-crd-git.yaml
+  - prometheus-community.yaml
