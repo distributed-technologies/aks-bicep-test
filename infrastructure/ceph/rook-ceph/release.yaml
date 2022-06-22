@@ -20,6 +20,8 @@ spec:
     remediation:
       retries: 3
   values:
+    toolbox:
+      enabled: true
     image:
       tag: v1.7.2
     operatorNamespace: rook-ceph
