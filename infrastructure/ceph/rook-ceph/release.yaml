@@ -8,6 +8,7 @@ spec:
   chart:
     spec:
       chart: rook-ceph
+      version: 1.9.3
       sourceRef:
         kind: HelmRepository
         name: rook-ceph
@@ -22,8 +23,6 @@ spec:
   values:
     toolbox:
       enabled: true
-    operatorNamespace: rook-ceph
-    # Needed for AKS running
     csi:
       provisionerTolerations:
         - effect: NoSchedule
@@ -33,6 +32,3 @@ spec:
         - effect: NoSchedule
           key: storage-node
           operator: Exists
-    agent:
-      # AKS: https://rook.github.io/docs/rook/v1.7/flexvolume.html#azure-aks
-      flexVolumeDirPath: "/etc/kubernetes/volumeplugins"
