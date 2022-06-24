@@ -26,6 +26,7 @@ spec:
           # Hard set to `us-east-1` since it's not provided by the bkt-claim, even though I think it should be.
           region: us-east-1
           insecure: true
+          s3forcepathstyle: true
 
       structuredConfig:
         limits_config:
