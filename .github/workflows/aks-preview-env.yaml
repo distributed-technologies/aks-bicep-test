@@ -48,7 +48,7 @@ jobs:
 
       - name: 'Flux bootstrap'
         run: |
-          export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          export GITHUB_TOKEN=${{ secrets.FLUX_GIT_PAT }}
           flux bootstrap github \
           --owner=${GITHUB_REPOSITORY_OWNER} \
           --repository=${GITHUB_REPOSITORY#*/} \
