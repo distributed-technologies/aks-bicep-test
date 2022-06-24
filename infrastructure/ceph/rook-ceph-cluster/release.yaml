@@ -21,6 +21,8 @@ spec:
     remediation:
       retries: 3
   values:
+    toolbox:
+      enabled: true
     cephClusterSpec:
       dashboard:
         enabled: true
