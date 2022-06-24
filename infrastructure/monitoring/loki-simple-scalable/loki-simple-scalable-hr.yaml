@@ -14,12 +14,19 @@ spec:
         name: grafana-helm-charts
         namespace: flux-system
       interval: 60m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
   values:
     loki:
       storage:
+        bucketNames:
+          chunks: ${BUCKET_NAME}
         type: s3
         s3:
-          bucketnames: ${BUCKET_NAME}
           endpoint: ${BUCKET_HOST}
           secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
           accessKeyId:  ${AWS_ACCESS_KEY_ID}
