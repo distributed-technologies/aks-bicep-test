@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: disable-sc-job
+  labels:
+    app: disable-sc-job
+  annotations:
+    "helm.sh/hook": "pre-install"
+spec:
+  template:
+    metadata:
+      labels:
+        app: disable-sc-job
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: disable-sc
+      containers:
+      - name: disable-sc-job
+        image: alpine
+        imagePullPolicy: IfNotPresent
+        command: ["sh", "/tmp/disable-sc.sh"]
+        volumeMounts:
+        - name: disable-sc-sh
+          mountPath: /tmp/disable-sc.sh
+          subPath: disable-sc.sh
+      terminationGracePeriodSeconds: 0
+      volumes:
+      - name: disable-sc-sh
+        configMap:
+          name: disable-sc-sh
+          defaultMode: 0777
+  backoffLimit: 5
+  completions: 1
+  parallelism: 1
