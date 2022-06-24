@@ -22,6 +22,8 @@ spec:
       retries: 3
   values:
     cephClusterSpec:
+      dashboard:
+        enabled: true
       mon:
         volumeClaimTemplate:
           spec:
