@@ -27,3 +27,7 @@ spec:
       kind: StorageClass
       name: ceph-filesystem
       namespace: rook-ceph
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: rook-ceph-osd-0
+      namespace: rook-ceph
