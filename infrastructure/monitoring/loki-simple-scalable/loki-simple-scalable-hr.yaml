@@ -27,12 +27,14 @@ spec:
           chunks: ${BUCKET_NAME}
         type: s3
         s3:
-          endpoint: ${BUCKET_HOST}
-          secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
-          accessKeyId:  ${AWS_ACCESS_KEY_ID}
-          # Hard set to `us-east-1` since it's not provided by the bkt-claim, even though I think it should be.
-          region: ${BUCKET_REGION}
+          s3: s3://${AWS_ACCESS_KEY_ID}:${AWS_SECRET_ACCESS_KEY}@${BUCKET_REGION}/${BUCKET_NAME}
+          # endpoint: ${BUCKET_HOST}
+          # secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+          # accessKeyId:  ${AWS_ACCESS_KEY_ID}
+          # # Hard set to `us-east-1` since it's not provided by the bkt-claim, even though I think it should be.
+          # region: ${BUCKET_REGION}
           insecure: true
+          s3forcepathstyle: true
 
       structuredConfig:
         limits_config:
