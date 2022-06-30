@@ -6,4 +6,6 @@ metadata:
 spec:
   type: oci
   interval: 5m0s
-  url: oci://ghcr.io/stefanprodan/charts
+  url: oci://mhtsandbox.azurecr.io/helm
+  secretRef:
+    name: regcred
