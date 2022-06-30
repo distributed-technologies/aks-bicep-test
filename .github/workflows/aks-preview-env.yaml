@@ -20,6 +20,14 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: 'Install flux'
+        run: |
+          curl -s https://fluxcd.io/install.sh | sudo bash
+
+      - name: 'Flux version'
+        run: |
+          flux -v
+
       - uses: actions/checkout@v3
 
       - name: 'Run az deploy cmd'
@@ -33,6 +41,20 @@ jobs:
       - name: 'Run kubectl'
         run: |
           kubectl version
+
+      - name: 'Flux check'
+        run: |
+          flux check --pre
+
+      - name: 'Flux bootstrap'
+        run: |
+          export GITHUB_TOKEN=${{ secrets.FLUX_GIT_PAT }}
+          flux bootstrap github \
+          --owner=${GITHUB_REPOSITORY_OWNER} \
+          --repository=${GITHUB_REPOSITORY#*/} \
+          --branch=${GITHUB_HEAD_REF} \
+          --path=clusters/aks \
+          --token-auth
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
